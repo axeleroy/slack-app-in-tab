@@ -1,0 +1,23 @@
+[tools]
+node = "22"
+
+[env]
+_.path = ['./node_modules/.bin']
+
+[tasks.npm-install]
+description = 'Installs dependencies with npm'
+run = 'npm install'
+sources = ['package.json', "package-lock.json", "mise.toml"]
+outputs = ['node_modules/.package-lock.json']
+
+[tasks.lint]
+run = 'node --run lint'
+depends = ['npm-install']
+
+[tasks.build]
+run = 'node --run build'
+depends = ['npm-install', 'lint']
+
+[tasks.sign]
+run = 'node --run sign'
+depends = ['npm-install', 'lint', 'build']

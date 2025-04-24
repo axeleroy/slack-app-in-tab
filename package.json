@@ -1,0 +1,13 @@
+{
+  "name": "slack-app-in-tab",
+  "version": "1.0.0",
+  "description": "A Chrome + Firefox extension to open the Slack app with its multi-workspace sidebar in a simple browser tab.",
+  "scripts": {
+    "build": "web-ext build --overwrite-dest",
+    "lint": "web-ext lint",
+    "sign": "web-ext sign"
+  },
+  "devDependencies": {
+    "web-ext": "^8.6.0"
+  }
+}
