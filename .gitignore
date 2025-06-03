@@ -3,3 +3,4 @@ slack-app-in-tab.zip
 slack-app-in-tab.pem
 web-ext-artifacts/
 node_modules/
+build/
