@@ -26,6 +26,7 @@
         "web-ext": "^8.6.0"
     },
     "dependencies": {
+        "@actions/core": "^1.11.1",
         "fontoxpath": "^3.33.2",
         "jsdom": "^26.1.0"
     },

@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import { JSDOM } from "jsdom";
 import { evaluateXPathToString } from "fontoxpath";
 import path from "node:path";
+import { setOutput } from "@actions/core";
 
 const fetchUaPage = async (): Promise<string> => {
     const result = await fetch("https://www.whatismybrowser.com/guides/the-latest-user-agent/chrome-os");
@@ -23,21 +24,36 @@ const extractUaString = (html: string): string => {
 
 const regex = /(CHROMEOS_UAS = ")([^"]+)(")/;
 
-const replaceUaString = async (uaString: string): Promise<void> => {
-    const filePath = "contentScript.js";
+const replaceUaString = async (uaString: string): Promise<boolean> => {
+    const filePath = path.resolve("contentScript.js");
     const stats = await fs.stat(filePath);
     if (!stats.isFile()) {
-        throw new Error(`Could not find file ${path.resolve(filePath)}`);
+        throw new Error(`Could not find file ${filePath}`);
     }
     const data = await fs.readFile(filePath, { encoding: "utf8" });
+    // Check if the CHROME_UAS string is present
+    const matches = data.match(regex);
+    if (!matches) {
+        throw new Error(`Could match Regex in file ${filePath}`);
+    }
+    // Check if it has actually changed
+    const [_first, prevString] = matches;
+    if (prevString === uaString) {
+        return false;
+    }
+    // Replace it if it has changed
     const replaced = data.replace(regex, `$1${uaString}$3`);
     await fs.writeFile(filePath, replaced);
+    return true;
 };
 
 const fetchAndReplaceUaString = async (): Promise<string> => {
     const htmlPage = await fetchUaPage();
     let uaString = extractUaString(htmlPage);
-    await replaceUaString(uaString);
+    const replaced = await replaceUaString(uaString);
+    if (replaced) {
+        setOutput("replaced_ua_string", uaString);
+    }
     return uaString;
 };
 

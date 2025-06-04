@@ -12,6 +12,8 @@ jobs:
     update-ua:
         name: Fetch and commit last version
         runs-on: ubuntu-latest
+        outputs:
+            ua_string: ${{ steps.ua_update.outputs.replaced_ua_string }}
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -22,11 +24,13 @@ jobs:
                   cache: true
                   experimental: true
             - name: Execute script
+              id: ua_update
               run: mise run ua-update
             - name: Commit
+              if: ${{ steps.ua_update.outputs.replaced_ua_string }}
               run: |
                   git config --global user.name 'Axel Leroy'
                   git config --global user.email 'axeleroy@users.noreply.github.com'
                   git add contentScript.js
-                  git commit -am "Updated User-Agent" || exit 0
+                  git commit -am "Updated User-Agent to ${{ steps.ua_update.outputs.replaced_ua_string }}"
                   git push
