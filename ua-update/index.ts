@@ -47,14 +47,21 @@ const replaceUaString = async (uaString: string): Promise<boolean> => {
     return true;
 };
 
-const fetchAndReplaceUaString = async (): Promise<string> => {
+const fetchAndReplaceUaString = async (): Promise<void> => {
     const htmlPage = await fetchUaPage();
     let uaString = extractUaString(htmlPage);
     const replaced = await replaceUaString(uaString);
     if (replaced) {
+        console.log(`User-Agent string has changed to ${uaString}`);
         setOutput("replaced_ua_string", uaString);
+    } else {
+        console.log("User-Agent string has not changed");
     }
-    return uaString;
 };
 
-fetchAndReplaceUaString().then((uaString) => console.log(`Updated contentScript with ${uaString}`));
+fetchAndReplaceUaString()
+    .then(() => console.log(`Finished without error`))
+    .catch((e: Error) => {
+        console.error(e.message);
+        process.exit(1);
+    });
