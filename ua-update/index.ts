@@ -25,7 +25,7 @@ const extractUaString = (html: string): string => {
 const regex = /(CHROMEOS_UAS = ")([^"]+)(")/;
 
 const replaceUaString = async (uaString: string): Promise<boolean> => {
-    const filePath = path.resolve("../contentScript.js");
+    const filePath = path.resolve("contentScript.js");
     const stats = await fs.stat(filePath);
     if (!stats.isFile()) {
         throw new Error(`Could not find file ${filePath}`);
