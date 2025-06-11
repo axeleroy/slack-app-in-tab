@@ -14,6 +14,7 @@ jobs:
         runs-on: ubuntu-latest
         outputs:
             ua_string: ${{ steps.ua_update.outputs.replaced_ua_string }}
+            version_name: ${{ steps.define_version_name.outputs.version_name }}
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -26,6 +27,14 @@ jobs:
             - name: Execute script
               id: ua_update
               run: mise run ua-update
+            - name: Define version name
+              id: define_version_name
+              run: |
+                  "version_name=$(date +"%Y.%m.%d")" >> "$GITHUB_OUTPUT"
+            - name: Update manifest.json with new version
+              if: ${{ steps.ua_update.outputs.replaced_ua_string }}
+              run: |
+                  sed -iE 's/"version": "([^"]+)/"version": "${{ steps.define_version_name.outputs.version_name }}/' manifest.json
             - name: Commit
               if: ${{ steps.ua_update.outputs.replaced_ua_string }}
               run: |
@@ -34,33 +43,17 @@ jobs:
                   git add contentScript.js
                   git commit -am "Updated User-Agent to ${{ steps.ua_update.outputs.replaced_ua_string }}"
                   git push
-    update_version:
-        name: Update version
-        runs-on: ubuntu-latest
-        needs: update_ua
-        if: ${{ needs.update_ua.outputs.ua_string }}
-        outputs:
-            version_name: ${{ steps.define_version_name.outputs.version_name }}
-        steps:
-            - name: Define version name
-              id: define_version_name
-              run: |
-                  "version_name=$(date +"%Y.%m.%d")" >> "$GITHUB_OUTPUT"
-            - name: Update manifest.json with new version
-              run: |
-                  sed -E 's/"version": "([^"]+)/"version": "${{ steps.define_version_name.outputs.version_name }}/' manifest.json
     publish_amo:
         name: Publish to AMO
         runs-on: ubuntu-latest
         needs:
             - update_ua
-            - update_version
         if: ${{ needs.update_ua.outputs.ua_string }}
+        # TODO: configure job timeout-minutes
         steps:
             - name: Build and publish extension
               env:
                   WEB_EXT_CHANNEL: listed
-                  WEB_EXT_APPROVAL_TIMEOUT: 0
                   WEB_EXT_API_KEY: ${{ secrets.AMO_API_KEY }}
                   WEB_EXT_API_SECRET: ${{ secrets.AMO_API_SECRET }}
               run: mise run sign
