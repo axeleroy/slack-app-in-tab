@@ -34,7 +34,7 @@ jobs:
             - name: Update manifest.json with new version
               if: ${{ steps.ua_update.outputs.replaced_ua_string }}
               run: |
-                  sed -iE 's/"version": "([^"]+)/"version": "${{ steps.define_version_name.outputs.version_name }}/' src/manifest.json
+                  sed -i -E 's/"version": "([^"]+)/"version": "${{ steps.define_version_name.outputs.version_name }}/' src/manifest.json
             - name: Commit
               if: ${{ steps.ua_update.outputs.replaced_ua_string }}
               run: |
