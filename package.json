@@ -4,9 +4,9 @@
     "description": "A Chrome + Firefox extension to open the Slack app with its multi-workspace sidebar in a simple browser tab.",
     "scripts": {
         "update-ua": "ts-node ua-update/index.ts",
-        "build": "web-ext build --overwrite-dest --ignore-files build/ ua-update/",
-        "lint": "web-ext lint",
-        "sign": "web-ext sign",
+        "build": "web-ext build --overwrite-dest -s src/",
+        "lint": "web-ext lint -s src/",
+        "sign": "web-ext sign -s src/",
         "prepare": "husky"
     },
     "devDependencies": {
