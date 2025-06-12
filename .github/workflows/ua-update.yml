@@ -30,7 +30,7 @@ jobs:
             - name: Define version name
               id: define_version_name
               run: |
-                  "version_name=$(date +"%Y.%m.%d")" >> "$GITHUB_OUTPUT"
+                  echo "version_name=$(date +"%Y.%m.%d")" >> "$GITHUB_OUTPUT"
             - name: Update manifest.json with new version
               if: ${{ steps.ua_update.outputs.replaced_ua_string }}
               run: |
@@ -40,7 +40,7 @@ jobs:
               run: |
                   git config --global user.name 'Axel Leroy'
                   git config --global user.email 'axeleroy@users.noreply.github.com'
-                  git add contentScript.js
+                  git add contentScript.js manifest.json
                   git commit -am "Updated User-Agent to ${{ steps.ua_update.outputs.replaced_ua_string }}"
                   git push
     publish_amo:
