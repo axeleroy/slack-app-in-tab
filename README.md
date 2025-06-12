@@ -4,7 +4,7 @@ A Firefox extension to open the Slack app with its multi-workspace sidebar in a 
 the Slack app.
 
 > [!NOTE]  
-> This extension is a fork of @louisremi's [Slack App-in-Tab](https://github.com/louisremi/slack-app-in-tab) which keeps
+> This extension is a fork of [@louisremi](https://github.com/louisremi)'s [Slack App-in-Tab](https://github.com/louisremi/slack-app-in-tab) which keeps
 > the functionality intact while introducing an
 > [automated workflow](https://github.com/axeleroy/slack-app-in-tab/actions/workflows/ua-update.yml) to keep the User
 > Agent string up to date with the latest Chrome OS release (see [How does it work?](#how-does-it-work))
