@@ -5,7 +5,8 @@
     "description": "Slack App-in-Tab Reborn is a fork of \"Slack App-in-Tab\" which has unfortunately stopped working. This version keeps the same functionality as the original.\n\nHow to use\n\n1. Install the extension\n2. Visit https://app.slack.com and log into any of your workspaces\n3. That's it, all your workspaces appear in the sidebar, just like in the Slack App\n\nHow does it work?\n\nSlack App-in-Tab Reborn changes how Firefox presents itself to Slack so it believes you are browsing from a Chromebook. Since Chromebooks can't run the Slack app, it then shows the workspace switcher as it does in the app.",
     "developer_comments": "Access to slack.com is required in order to change the User-Agent (the way Firefox presents itself to Slack)",
     "version": {
-        "license": "MPL-2.0"
+        "license": "MPL-2.0",
+        "release_notes": "Updated User Agent string to XXX"
     },
     "categories": {
         "firefox": ["social-communication"]

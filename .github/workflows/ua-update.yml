@@ -49,11 +49,24 @@ jobs:
         needs:
             - update_ua
         if: ${{ needs.update_ua.outputs.ua_string }}
-        # TODO: configure job timeout-minutes
+        timeout-minutes: 90000
         steps:
+            - name: Update metadata.json with new version
+              if: ${{ steps.ua_update.outputs.replaced_ua_string }}
+              run: |
+                  sed -iE 's/Updated User Agent string to ([^"]+)/Updated User Agent string to ${{ needs.update_ua.outputs.ua_string }}/' metadata.json
             - name: Build and publish extension
               env:
                   WEB_EXT_CHANNEL: listed
+                  WEB_AMO_METADATA: metadata.json
                   WEB_EXT_API_KEY: ${{ secrets.AMO_API_KEY }}
                   WEB_EXT_API_SECRET: ${{ secrets.AMO_API_SECRET }}
               run: mise run sign
+            - name: Create release
+              uses: softprops/action-gh-release@v2
+              with:
+                  name: ${{ needs.update_ua.outputs.version_name }}
+                  tag_name: ${{ needs.update_ua.outputs.version_name }}
+                  generate_release_notes: true
+                  append_body: true
+                  body: "Updated User Agent string to ${{ needs.update_ua.outputs.ua_string }}"
