@@ -24,4 +24,4 @@ depends = ['npm-install', 'lint']
 
 [tasks.sign]
 run = 'node --run sign'
-depends = ['npm-install', 'lint', 'build']
+depends = ['npm-install', 'lint']
