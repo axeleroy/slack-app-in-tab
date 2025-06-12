@@ -20,7 +20,7 @@ jobs:
               uses: actions/checkout@v4
             - uses: jdx/mise-action@v2
               with:
-                  version: 2024.12.14
+                  version: 2025.6.1
                   install: true
                   cache: true
                   experimental: true
@@ -51,6 +51,14 @@ jobs:
         if: ${{ needs.update_ua.outputs.ua_string }}
         timeout-minutes: 90000
         steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - uses: jdx/mise-action@v2
+              with:
+                  version: 2025.6.1
+                  install: true
+                  cache: true
+                  experimental: true
             - name: Update metadata.json with new version
               if: ${{ steps.ua_update.outputs.replaced_ua_string }}
               run: |
