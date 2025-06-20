@@ -11,7 +11,7 @@ the Slack app.
 
 # How to use
 
-1. Install the extension from [addons.mozilla.org](https://addons.mozilla.org/en-US/firefox/addon/slack-app-in-tab/)
+1. Install the extension from [addons.mozilla.org](https://addons.mozilla.org/en-US/firefox/addon/slack-app-in-tab-reborn/)
 2. Visit [app.slack.com](https://app.slack.com) and log into any of your workspaces
 3. That's it, all your workspaces appear in the sidebar, just like in the Slack App
 
