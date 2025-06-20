@@ -52,7 +52,7 @@ jobs:
         needs:
             - update_ua
         if: ${{ needs.update_ua.outputs.ua_string }}
-        timeout-minutes: 90000
+        timeout-minutes: 10080
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -71,6 +71,7 @@ jobs:
               env:
                   WEB_EXT_CHANNEL: listed
                   WEB_EXT_AMO_METADATA: metadata.json
+                  WEB_EXT_APPROVAL_TIMEOUT: 604800000
                   WEB_EXT_API_KEY: ${{ secrets.AMO_API_KEY }}
                   WEB_EXT_API_SECRET: ${{ secrets.AMO_API_SECRET }}
               run: mise run sign
