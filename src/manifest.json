@@ -14,5 +14,10 @@
             "run_at": "document_start"
         }
     ],
-    "permissions": ["activeTab", "tabs", "https://*.slack.com/*"]
+    "permissions": ["activeTab", "tabs", "https://*.slack.com/*"],
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "{ea2fdc31-184c-4533-aaf3-61fc2e70411b}"
+        }
+    }
 }
