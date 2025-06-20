@@ -35,7 +35,7 @@ jobs:
             - name: Update manifest.json with new version
               if: ${{ steps.ua_update.outputs.replaced_ua_string }}
               run: |
-                  sed -i -E 's/"version": "([^"]+)/"version": "${{ steps.define_version_name.outputs.version_name }}/' src/manifest.json
+                  sed -i -E 's!"version": "([^"]+)!"version": "${{ steps.define_version_name.outputs.version_name }}!' src/manifest.json
             - name: Commit
               id: commit
               if: ${{ steps.ua_update.outputs.replaced_ua_string }}
@@ -66,7 +66,7 @@ jobs:
                   experimental: true
             - name: Update metadata.json with new version
               run: |
-                  sed -iE 's/Updated User Agent string to ([^"]+)/Updated User Agent string to ${{ needs.update_ua.outputs.ua_string }}/' metadata.json
+                  sed -iE 's!Updated User Agent string to ([^"]+)!Updated User Agent string to ${{ needs.update_ua.outputs.ua_string }}!' metadata.json
             - name: Build and publish extension
               env:
                   WEB_EXT_CHANNEL: listed
