@@ -7,7 +7,8 @@ import { setOutput } from "@actions/core";
 const fetchUaPage = async (): Promise<string> => {
     const result = await fetch("https://www.whatismybrowser.com/guides/the-latest-user-agent/chrome-os");
     if (!result.ok) {
-        console.error(`Fetch failed with status ${result.status} and body ${await result.text()}`);
+        const body = await result.text();
+        console.error(`Fetch failed with status ${result.status} and body ${body}`);
         throw new Error("Fetch failed");
     }
     return result.text();
