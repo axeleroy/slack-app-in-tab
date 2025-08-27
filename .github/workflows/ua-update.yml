@@ -29,6 +29,7 @@ jobs:
               run: mise run ua-update
             - name: Define version name
               id: define_version_name
+              if: ${{ steps.ua_update.outputs.replaced_ua_string }}
               run: |
                   echo "version_name=$(date +"%Y.%-m.%-d")" >> "$GITHUB_OUTPUT"
             - name: Update manifest.json with new version
