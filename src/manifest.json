@@ -17,7 +17,10 @@
     "permissions": ["activeTab", "tabs", "https://*.slack.com/*"],
     "browser_specific_settings": {
         "gecko": {
-            "id": "{ea2fdc31-184c-4533-aaf3-61fc2e70411b}"
+            "id": "{ea2fdc31-184c-4533-aaf3-61fc2e70411b}",
+            "data_collection_permissions": {
+                "required": ["none"]
+            }
         }
     }
 }
