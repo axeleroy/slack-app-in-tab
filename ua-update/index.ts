@@ -23,7 +23,7 @@ const extractUaString = (html: string): string => {
     return selectedValue;
 };
 
-const regex = /(CHROMEOS_UAS = ")([^"]+)(")/;
+const uasRegex = /(CHROMEOS_UAS = ")([^"]+)(")/;
 
 const replaceUaString = async (uaString: string): Promise<boolean> => {
     const filePath = path.resolve("src/contentScript.js");
@@ -33,9 +33,9 @@ const replaceUaString = async (uaString: string): Promise<boolean> => {
     }
     const data = await fs.readFile(filePath, { encoding: "utf8" });
     // Check if the CHROME_UAS string is present
-    const matches = data.match(regex);
+    const matches = data.match(uasRegex);
     if (!matches) {
-        throw new Error(`Could match Regex in file ${filePath}`);
+        throw new Error(`Could not find CHROME_UAS in file ${filePath}`);
     }
     // Check if it has actually changed
     const [_match, _first, prevString] = matches;
@@ -43,9 +43,20 @@ const replaceUaString = async (uaString: string): Promise<boolean> => {
         return false;
     }
     // Replace it if it has changed
-    const replaced = data.replace(regex, `$1${uaString}$3`);
+    const replaced = data.replace(uasRegex, `$1${uaString}$3`);
     await fs.writeFile(filePath, replaced);
     return true;
+};
+
+const versionRegex = /Chrome\/(\d+)/;
+
+const extractPrettyVersion = (uaString: string): string => {
+    const matches = uaString.match(versionRegex);
+    if (!matches) {
+        throw new Error(`Could not find Chrome version in User Agent ${uaString}`);
+    }
+    const [_match, version] = matches;
+    return `Chrome ${version}`;
 };
 
 const fetchAndReplaceUaString = async (): Promise<void> => {
@@ -54,7 +65,7 @@ const fetchAndReplaceUaString = async (): Promise<void> => {
     const replaced = await replaceUaString(uaString);
     if (replaced) {
         console.log(`User-Agent string has changed to ${uaString}`);
-        setOutput("replaced_ua_string", uaString);
+        setOutput("chrome_version", extractPrettyVersion(uaString));
     } else {
         console.log("User-Agent string has not changed");
     }
