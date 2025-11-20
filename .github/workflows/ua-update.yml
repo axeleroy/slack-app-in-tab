@@ -18,7 +18,7 @@ jobs:
             updated_ref: ${{ steps.commit.outputs.updated_ref }}
         steps:
             - name: Checkout
-              uses: actions/checkout@v5
+              uses: actions/checkout@v6
             - uses: jdx/mise-action@v3
               with:
                   install: true
@@ -55,7 +55,7 @@ jobs:
         timeout-minutes: 10080
         steps:
             - name: Checkout
-              uses: actions/checkout@v5
+              uses: actions/checkout@v6
               with:
                   ref: ${{ needs.update_ua.outputs.updated_ref }}
             - uses: jdx/mise-action@v3
