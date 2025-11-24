@@ -40,7 +40,8 @@ export const replaceUaString = async (uaString: string): Promise<boolean> => {
     }
     // Check if it has actually changed
     const [_match, _first, prevString] = matches;
-    if (prevString === uaString) {
+    const compareResult = uaString.localeCompare(prevString);
+    if (compareResult <= 0) {
         return false;
     }
     // Replace it if it has changed

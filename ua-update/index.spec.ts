@@ -1,7 +1,6 @@
-import { describe, it, expect, assert, vi, beforeEach } from "vitest";
+import { assert, beforeEach, describe, expect, it, vi } from "vitest";
 import { extractPrettyVersion, extractUaString, replaceUaString } from "./index";
 import { fs, vol } from "memfs";
-import path from "node:path";
 
 vi.mock("node:fs/promises");
 
@@ -63,6 +62,21 @@ describe("replaceUaString", () => {
     it("should return false and don't change the file if the UA string hasn't changed", async () => {
         // GIVEN
         const originalData = `const CHROMEOS_UAS = "Mozilla/5.0 (X11; CrOS x86_64 16181.61.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.6998.198 Safari/537.36";`;
+        fs.writeFileSync("/src/contentScript.js", originalData);
+        const uaString =
+            "Mozilla/5.0 (X11; CrOS x86_64 16181.61.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.6998.198 Safari/537.36";
+
+        // WHEN
+        const result = await replaceUaString(uaString);
+
+        // THEN
+        expect(result).toBe(false);
+        const fileData = fs.readFileSync("/src/contentScript.js", "utf-8");
+        expect(fileData).toBe(originalData);
+    });
+    it("should return false and don't change the file if the UA string version is lower than the existing one", async () => {
+        // GIVEN
+        const originalData = `const CHROMEOS_UAS = "Mozilla/5.0 (X11; CrOS x86_64 16463.20.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.7499.28 Safari/537.36";`;
         fs.writeFileSync("/src/contentScript.js", originalData);
         const uaString =
             "Mozilla/5.0 (X11; CrOS x86_64 16181.61.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.6998.198 Safari/537.36";
