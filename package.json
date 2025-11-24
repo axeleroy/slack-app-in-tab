@@ -5,6 +5,7 @@
     "scripts": {
         "update-ua": "ts-node ua-update/index.ts",
         "build": "web-ext build --overwrite-dest -s src/",
+        "test": "vitest",
         "lint": "web-ext lint -s src/",
         "sign": "web-ext sign -s src/",
         "prepare": "husky"
@@ -19,10 +20,12 @@
         "globals": "^16.2.0",
         "husky": "^9.1.7",
         "lint-staged": "^16.1.0",
+        "memfs": "^4.51.0",
         "prettier": "3.6.2",
         "ts-node": "^10.9.2",
         "typescript": "^5.8.3",
         "typescript-eslint": "^8.33.1",
+        "vitest": "^4.0.13",
         "web-ext": "^9.0.0"
     },
     "dependencies": {

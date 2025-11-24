@@ -10,12 +10,16 @@ run = 'npm install'
 sources = ['package.json', "package-lock.json", "mise.toml"]
 outputs = ['node_modules/.package-lock.json']
 
-[tasks.ua-update]
-run = 'node --run update-ua'
-depends = ['npm-install']
-
 [tasks.lint]
 run = 'node --run lint'
+depends = ['npm-install']
+
+[tasks.test]
+run = 'node --run test'
+depends = ['npm-install']
+
+[tasks.ua-update]
+run = 'node --run update-ua'
 depends = ['npm-install']
 
 [tasks.build]

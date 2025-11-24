@@ -14,7 +14,7 @@ const fetchUaPage = async (): Promise<string> => {
     return result.text();
 };
 
-const extractUaString = (html: string): string => {
+export const extractUaString = (html: string): string => {
     const dom = new JSDOM(html);
     const selectedValue = evaluateXPathToString("//table/tbody/tr[1]/td[2]/ul/li[1]", dom.window.document);
     if (!selectedValue) {
@@ -25,10 +25,11 @@ const extractUaString = (html: string): string => {
 
 const uasRegex = /(CHROMEOS_UAS = ")([^"]+)(")/;
 
-const replaceUaString = async (uaString: string): Promise<boolean> => {
+export const replaceUaString = async (uaString: string): Promise<boolean> => {
     const filePath = path.resolve("src/contentScript.js");
-    const stats = await fs.stat(filePath);
-    if (!stats.isFile()) {
+    try {
+        await fs.access(filePath);
+    } catch (e) {
         throw new Error(`Could not find file ${filePath}`);
     }
     const data = await fs.readFile(filePath, { encoding: "utf8" });
@@ -50,7 +51,7 @@ const replaceUaString = async (uaString: string): Promise<boolean> => {
 
 const versionRegex = /Chrome\/(\d+)/;
 
-const extractPrettyVersion = (uaString: string): string => {
+export const extractPrettyVersion = (uaString: string): string => {
     const matches = uaString.match(versionRegex);
     if (!matches) {
         throw new Error(`Could not find Chrome version in User Agent ${uaString}`);
