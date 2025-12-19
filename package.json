@@ -25,7 +25,7 @@
         "ts-node": "^10.9.2",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.50.0",
-        "vitest": "^4.0.15",
+        "vitest": "^4.0.16",
         "web-ext": "^9.2.0"
     },
     "dependencies": {
