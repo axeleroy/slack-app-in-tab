@@ -30,7 +30,7 @@
     },
     "dependencies": {
         "@actions/core": "^2.0.1",
-        "fontoxpath": "^3.33.2",
+        "fontoxpath": "^3.34.0",
         "jsdom": "^27.3.0"
     },
     "lint-staged": {
