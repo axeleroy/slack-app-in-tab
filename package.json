@@ -29,7 +29,7 @@
         "web-ext": "^9.2.0"
     },
     "dependencies": {
-        "@actions/core": "^2.0.3",
+        "@actions/core": "^3.0.0",
         "fontoxpath": "^3.34.0",
         "jsdom": "^27.4.0"
     },
