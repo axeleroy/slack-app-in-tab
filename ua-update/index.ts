@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import { JSDOM } from "jsdom";
-import { evaluateXPathToString } from "fontoxpath";
+import fontoxpath from "fontoxpath";
+const { evaluateXPathToString } = fontoxpath;
 import path from "node:path";
 import { setOutput } from "@actions/core";
 
