@@ -25,3 +25,5 @@ jobs:
               run: mise run test
             - name: Run lint
               run: mise run lint
+            - name: Run ua-update
+              run: mise run ua-update
