@@ -13,7 +13,7 @@ jobs:
         name: Fetch and commit last version
         runs-on: ubuntu-latest
         outputs:
-            chrome_version: ${{ steps.ua_update.outputs.chrome_version }}
+            release_notes: ${{ steps.ua_update.outputs.extract_release_notes }}
             version_name: ${{ steps.define_version_name.outputs.version_name }}
             updated_ref: ${{ steps.commit.outputs.updated_ref }}
         steps:
@@ -24,26 +24,42 @@ jobs:
                   install: true
                   cache: true
                   experimental: true
-            - name: Execute script
+            - name: Execute User Agent update script
               id: ua_update
               run: mise run ua-update
             - name: Define version name
               id: define_version_name
-              if: ${{ steps.ua_update.outputs.chrome_version }}
+              if: ${{ steps.ua_update.outputs.chrome_version || github.event_name == 'workflow_dispatch' }}
               run: |
                   echo "version_name=$(date +"%Y.%-m.%-d")" >> "$GITHUB_OUTPUT"
             - name: Update manifest.json with new version
+              if: ${{ steps.define_version_name.outputs.version_name }}
+              run: |
+                  MANIFEST_FILE=$(cat src/manifest.json | jq '.version="${{ steps.define_version_name.outputs.version_name }}"')
+                  echo "$MANIFEST_FILE" > src/manifest.json
+            - name: Update metadata.json with new Chrome version
               if: ${{ steps.ua_update.outputs.chrome_version }}
               run: |
-                  sed -i -E 's!"version": "([^"]+)!"version": "${{ steps.define_version_name.outputs.version_name }}!' src/manifest.json
+                  METADATA_FILE=$(cat metadata.json | jq '.version.release_notes."en-US"="Updated User Agent string to ${{ steps.ua_update.outputs.chrome_version }}"')
+                  echo "$METADATA_FILE" > metadata.json
+            - name: Extract release notes
+              id: extract_release_notes
+              if: ${{ steps.define_version_name.outputs.version_name }}
+              run: |
+                  echo "release_notes=$(cat metadata.json | jq -r '.version.release_notes."en-US"')" >> "$GITHUB_OUTPUT"
+            - name: Prepare commit message
+              id: prepare_commit
+              if: ${{ steps.define_version_name.outputs.version_name }}
+              run: |
+                  echo "commit_message=$(( ${{steps.ua_update.outputs.chrome_version}} ? 'Updated User-Agent to ${{ steps.ua_update.outputs.chrome_version }}' : 'Prepare version ${{ steps.define_version_name.outputs.version_name }}' ))" >> "$GITHUB_OUTPUT"
             - name: Commit
               id: commit
-              if: ${{ steps.ua_update.outputs.chrome_version }}
+              if: ${{ steps.define_version_name.outputs.version_name }}
               run: |
                   git config --global user.name 'Axel Leroy'
                   git config --global user.email 'axeleroy@users.noreply.github.com'
-                  git add src/
-                  git commit -am "Updated User-Agent to ${{ steps.ua_update.outputs.chrome_version }}"
+                  git add src/manifest.json metadata.json
+                  git commit -am "${{ steps.prepare_commit.outputs.commit_message }}"
                   echo "updated_ref=$(git log -1 --format=%H)" >> "$GITHUB_OUTPUT"
                   git push
     publish_amo:
@@ -51,7 +67,7 @@ jobs:
         runs-on: ubuntu-latest
         needs:
             - update_ua
-        if: ${{ needs.update_ua.outputs.chrome_version }}
+        if: ${{ needs.update_ua.outputs.version_name }}
         timeout-minutes: 10080
         steps:
             - name: Checkout
@@ -63,9 +79,6 @@ jobs:
                   install: true
                   cache: true
                   experimental: true
-            - name: Update metadata.json with new version
-              run: |
-                  sed -i -E 's!Updated User Agent string to ([^"]+)!Updated User Agent string to ${{ needs.update_ua.outputs.chrome_version }}!' metadata.json
             - name: Build and publish extension
               env:
                   WEB_EXT_CHANNEL: listed
@@ -81,4 +94,4 @@ jobs:
                   tag_name: ${{ needs.update_ua.outputs.version_name }}
                   generate_release_notes: true
                   append_body: true
-                  body: "Updated User Agent string to ${{ needs.update_ua.outputs.chrome_version }}"
+                  body: ${{ needs.update_ua.outputs.release_notes }}

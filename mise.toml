@@ -1,4 +1,5 @@
 [tools]
+jq = "latest"
 node = "24.15.0"
 
 [env]
