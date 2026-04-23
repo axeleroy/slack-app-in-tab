@@ -60,7 +60,6 @@ jobs:
                   ref: ${{ needs.update_ua.outputs.updated_ref }}
             - uses: jdx/mise-action@v4
               with:
-                  version: 2025.6.1
                   install: true
                   cache: true
                   experimental: true
