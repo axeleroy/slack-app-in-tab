@@ -5,17 +5,12 @@ on:
         - cron: "0 1 * * *" # Every day at 01:00 UTC
     workflow_dispatch:
 
-permissions:
-    contents: write
-
 jobs:
     update_ua:
-        name: Fetch and commit last version
+        name: Check and commit last Chrome version
         runs-on: ubuntu-latest
         outputs:
-            release_notes: ${{ steps.ua_update.outputs.extract_release_notes }}
-            version_name: ${{ steps.define_version_name.outputs.version_name }}
-            updated_ref: ${{ steps.commit.outputs.updated_ref }}
+            chrome_version: ${{ steps.ua_update.outputs.chrome_version }}
         steps:
             - name: Checkout
               uses: actions/checkout@v6
@@ -27,71 +22,22 @@ jobs:
             - name: Execute User Agent update script
               id: ua_update
               run: mise run ua-update
-            - name: Define version name
-              id: define_version_name
-              if: ${{ steps.ua_update.outputs.chrome_version || github.event_name == 'workflow_dispatch' }}
-              run: |
-                  echo "version_name=$(date +"%Y.%-m.%-d")" >> "$GITHUB_OUTPUT"
-            - name: Update manifest.json with new version
-              if: ${{ steps.define_version_name.outputs.version_name }}
-              run: |
-                  MANIFEST_FILE=$(cat src/manifest.json | jq '.version="${{ steps.define_version_name.outputs.version_name }}"')
-                  echo "$MANIFEST_FILE" > src/manifest.json
             - name: Update metadata.json with new Chrome version
               if: ${{ steps.ua_update.outputs.chrome_version }}
               run: |
                   METADATA_FILE=$(cat metadata.json | jq '.version.release_notes."en-US"="Updated User Agent string to ${{ steps.ua_update.outputs.chrome_version }}"')
                   echo "$METADATA_FILE" > metadata.json
-            - name: Extract release notes
-              id: extract_release_notes
-              if: ${{ steps.define_version_name.outputs.version_name }}
-              run: |
-                  echo "release_notes=$(cat metadata.json | jq -r '.version.release_notes."en-US"')" >> "$GITHUB_OUTPUT"
-            - name: Prepare commit message
-              id: prepare_commit
-              if: ${{ steps.define_version_name.outputs.version_name }}
-              run: |
-                  echo "commit_message=$(( ${{steps.ua_update.outputs.chrome_version}} ? 'Updated User-Agent to ${{ steps.ua_update.outputs.chrome_version }}' : 'Prepare version ${{ steps.define_version_name.outputs.version_name }}' ))" >> "$GITHUB_OUTPUT"
             - name: Commit
               id: commit
-              if: ${{ steps.define_version_name.outputs.version_name }}
+              if: ${{ steps.ua_update.outputs.chrome_version }}
               run: |
                   git config --global user.name 'Axel Leroy'
                   git config --global user.email 'axeleroy@users.noreply.github.com'
                   git add src/manifest.json metadata.json
-                  git commit -am "${{ steps.prepare_commit.outputs.commit_message }}"
-                  echo "updated_ref=$(git log -1 --format=%H)" >> "$GITHUB_OUTPUT"
+                  git commit -am "Updated User Agent string to ${{ steps.ua_update.outputs.chrome_version }}"
                   git push
-    publish_amo:
-        name: Publish to AMO
-        runs-on: ubuntu-latest
+    publish:
+        uses: axeleroy/slack-app-in-tab/.github/workflows/publish
         needs:
             - update_ua
-        if: ${{ needs.update_ua.outputs.version_name }}
-        timeout-minutes: 10080
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v6
-              with:
-                  ref: ${{ needs.update_ua.outputs.updated_ref }}
-            - uses: jdx/mise-action@v4
-              with:
-                  install: true
-                  cache: true
-                  experimental: true
-            - name: Build and publish extension
-              env:
-                  WEB_EXT_CHANNEL: listed
-                  WEB_EXT_AMO_METADATA: metadata.json
-                  WEB_EXT_APPROVAL_TIMEOUT: 604800000
-                  WEB_EXT_API_KEY: ${{ secrets.AMO_API_KEY }}
-                  WEB_EXT_API_SECRET: ${{ secrets.AMO_API_SECRET }}
-              run: mise run sign
-            - name: Create release
-              uses: softprops/action-gh-release@v3
-              with:
-                  name: ${{ needs.update_ua.outputs.version_name }}
-                  tag_name: ${{ needs.update_ua.outputs.version_name }}
-                  generate_release_notes: true
-                  append_body: true
-                  body: ${{ needs.update_ua.outputs.release_notes }}
+        if: ${{ needs.update_ua.outputs.chrome_version }}
