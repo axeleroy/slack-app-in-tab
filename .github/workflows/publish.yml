@@ -41,7 +41,8 @@ jobs:
               run: |
                   git config --global user.name 'Axel Leroy'
                   git config --global user.email 'axeleroy@users.noreply.github.com'
-                  git add src/manifest.json metadata.json
+                  git add src/manifest.json
+                  pnpm prepare
                   git commit -am "Prepare version ${{ steps.define_version_name.outputs.version_name }}"
                   echo "updated_ref=$(git log -1 --format=%H)" >> "$GITHUB_OUTPUT"
                   git push
