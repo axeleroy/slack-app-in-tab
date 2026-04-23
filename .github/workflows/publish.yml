@@ -12,7 +12,7 @@ jobs:
         name: Prepare release
         runs-on: ubuntu-latest
         outputs:
-            release_notes: ${{ steps.ua_update.outputs.extract_release_notes }}
+            release_notes: ${{ steps.extract_release_notes.outputs.release_notes }}
             version_name: ${{ steps.define_version_name.outputs.version_name }}
             updated_ref: ${{ steps.commit.outputs.updated_ref }}
         steps:
