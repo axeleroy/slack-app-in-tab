@@ -6,7 +6,8 @@
     "rangeStrategy": "bump",
     "packageRules": [
         {
-            "matchPackageNames": ["axeleroy/slack-app-in-tab/.github/workflows/publish.yml"],
+            "matchCategories": ["github-actions"],
+            "matchPackageNames": ["axeleroy/slack-app-in-tab"],
             "pinDigests": false
         }
     ]
