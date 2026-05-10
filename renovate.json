@@ -3,5 +3,11 @@
     "extends": ["config:best-practices", ":labels(dependencies)", ":automergeStableNonMajor"],
     "minimumReleaseAge": "7 days",
     "dependencyDashboard": true,
-    "rangeStrategy": "bump"
+    "rangeStrategy": "bump",
+    "packageRules": [
+        {
+            "matchDepNames": ["axeleroy/slack-app-in-tab/.github/workflows/publish.yml"],
+            "pinDigests": false
+        }
+    ]
 }
