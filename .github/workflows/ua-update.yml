@@ -38,7 +38,7 @@ jobs:
                   git commit -am "Updated User Agent string to ${{ steps.ua_update.outputs.chrome_version }}"
                   git push
     publish:
-        uses: axeleroy/slack-app-in-tab/.github/workflows/publish.yml@fe0a2e2b83d199cbef2153f7a999faa9ab062718 # main
+        uses: axeleroy/slack-app-in-tab/.github/workflows/publish.yml@913b492928c7dc2e090821b886d85521a008d32e # main
         needs:
             - update_ua
         if: ${{ needs.update_ua.outputs.chrome_version }}
