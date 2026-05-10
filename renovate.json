@@ -4,11 +4,5 @@
     "minimumReleaseAge": "7 days",
     "dependencyDashboard": true,
     "rangeStrategy": "bump",
-    "packageRules": [
-        {
-            "matchCategories": ["github-actions"],
-            "matchPackageNames": ["axeleroy/slack-app-in-tab"],
-            "pinDigests": false
-        }
-    ]
+    "ignoreDeps": ["axeleroy/slack-app-in-tab"]
 }
