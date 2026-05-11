@@ -4,5 +4,8 @@
     "minimumReleaseAge": "7 days",
     "dependencyDashboard": true,
     "rangeStrategy": "bump",
-    "ignoreDeps": ["axeleroy/slack-app-in-tab"]
+    "ignoreDeps": ["axeleroy/slack-app-in-tab"],
+    "lockFileMaintenance": {
+        "enabled": true
+    }
 }
