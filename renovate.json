@@ -6,6 +6,7 @@
     "rangeStrategy": "bump",
     "ignoreDeps": ["axeleroy/slack-app-in-tab"],
     "lockFileMaintenance": {
-        "enabled": true
+        "automerge": true,
+        "minimumReleaseAgeBehaviour": "timestamp-optional"
     }
 }
