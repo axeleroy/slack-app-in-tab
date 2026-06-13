@@ -15,7 +15,7 @@
     "version": {
         "license": "MPL-2.0",
         "release_notes": {
-            "en-US": "Updated User Agent string to XXX"
+            "en-US": "Updated User Agent string to Chrome 148"
         }
     },
     "categories": {
