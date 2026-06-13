@@ -11,6 +11,7 @@ jobs:
         runs-on: ubuntu-latest
         outputs:
             chrome_version: ${{ steps.ua_update.outputs.chrome_version }}
+            ref: ${{ steps.commit.outputs.ref }}
         steps:
             - name: Checkout
               uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -36,9 +37,12 @@ jobs:
                   git add metadata.json
                   pnpm prepare
                   git commit -am "Updated User Agent string to ${{ steps.ua_update.outputs.chrome_version }}"
+                  echo "updated_ref=$(git log -1 --format=%H)" >> "$GITHUB_OUTPUT"
                   git push
     publish:
         uses: axeleroy/slack-app-in-tab/.github/workflows/publish.yml@main
         needs:
             - update_ua
         if: ${{ needs.update_ua.outputs.chrome_version }}
+        with:
+            ref: ${{ needs.update_ua.outputs.ref }}
