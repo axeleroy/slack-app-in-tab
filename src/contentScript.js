@@ -1,5 +1,5 @@
 // prettier-ignore
-const CHROMEOS_UAS = "Mozilla/5.0 (X11; CrOS x86_64 16667.62.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.7827.238 Safari/537.36";
+const CHROMEOS_UAS = "Mozilla/5.0 (X11; CrOS x86_64 16700.46.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.7871.150 Safari/537.36";
 
 const scriptTag = document.createElement("script");
 scriptTag.type = "text/javascript";
