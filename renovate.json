@@ -1,12 +1,5 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": ["config:best-practices", ":labels(dependencies)", ":automergeStableNonMajor"],
-    "minimumReleaseAge": "7 days",
-    "dependencyDashboard": true,
-    "rangeStrategy": "bump",
-    "ignoreDeps": ["axeleroy/slack-app-in-tab"],
-    "lockFileMaintenance": {
-        "automerge": true,
-        "minimumReleaseAgeBehaviour": "timestamp-optional"
-    }
+    "extends": ["local>axeleroy/renovate-config"],
+    "ignoreDeps": ["axeleroy/slack-app-in-tab"]
 }
