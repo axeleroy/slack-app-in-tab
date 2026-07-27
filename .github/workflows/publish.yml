@@ -21,10 +21,10 @@ jobs:
             updated_ref: ${{ steps.commit.outputs.updated_ref }}
         steps:
             - name: Checkout
-              uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
                   ref: ${{ github.event.inputs.ref || github.ref }}
-            - uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4
+            - uses: jdx/mise-action@9e7f7633ff6f6d6048a9418a68d48f288f50eb14 # v4.2.3
               with:
                   install: true
                   cache: true
@@ -60,10 +60,10 @@ jobs:
         timeout-minutes: 10080
         steps:
             - name: Checkout
-              uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
                   ref: ${{ needs.prepare.outputs.updated_ref }}
-            - uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4
+            - uses: jdx/mise-action@9e7f7633ff6f6d6048a9418a68d48f288f50eb14 # v4.2.3
               with:
                   install: true
                   cache: true
@@ -77,7 +77,7 @@ jobs:
                   WEB_EXT_API_SECRET: ${{ secrets.AMO_API_SECRET }}
               run: mise run sign
             - name: Create release
-              uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3
+              uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3.0.2
               with:
                   name: ${{ needs.prepare.outputs.version_name }}
                   tag_name: ${{ needs.prepare.outputs.version_name }}
