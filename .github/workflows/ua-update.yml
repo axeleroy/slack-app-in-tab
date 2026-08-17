@@ -46,3 +46,6 @@ jobs:
         if: ${{ needs.update_ua.outputs.chrome_version }}
         with:
             ref: ${{ needs.update_ua.outputs.ref }}
+        secrets:
+            AMO_API_KEY: ${{ secrets.AMO_API_KEY }}
+            AMO_API_SECRET: ${{ secrets.AMO_API_SECRET }}
