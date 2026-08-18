@@ -6,6 +6,11 @@ on:
             ref:
                 type: string
                 description: Git ref to checkout the repo with
+        secrets:
+            AMO_API_KEY:
+                required: true
+            AMO_API_SECRET:
+                required: true
     workflow_dispatch:
 
 permissions:
