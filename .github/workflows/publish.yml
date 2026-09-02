@@ -34,6 +34,7 @@ jobs:
                   install: true
                   cache: true
                   experimental: true
+                  minimum_release_age: 7d
             - name: Define version name
               id: define_version_name
               run: |
@@ -73,6 +74,7 @@ jobs:
                   install: true
                   cache: true
                   experimental: true
+                  minimum_release_age: 7d
             - name: Build and publish extension
               env:
                   WEB_EXT_CHANNEL: listed

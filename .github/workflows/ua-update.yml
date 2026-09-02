@@ -20,6 +20,7 @@ jobs:
                   install: true
                   cache: true
                   experimental: true
+                  minimum_release_age: 7d
             - name: Execute User Agent update script
               id: ua_update
               run: mise run ua-update
