@@ -24,7 +24,7 @@
         "memfs": "4.78.1",
         "prettier": "3.9.8",
         "ts-node": "10.9.2",
-        "typescript": "6.0.3",
+        "typescript": "7.0.2",
         "typescript-eslint": "8.70.0",
         "vitest": "5.0.1",
         "web-ext": "10.6.0"
