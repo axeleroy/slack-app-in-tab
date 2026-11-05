@@ -1,6 +1,6 @@
 [tools]
 jq = "latest"
-node = "24.22.2"
+node = "26.13.0"
 
 [env]
 _.path = ['./node_modules/.bin']
